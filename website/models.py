@@ -6,7 +6,7 @@ class Team(models.Model):
     team_name = models.CharField(max_length=255)
     project_name = models.CharField(max_length=255)
     ppt_url = models.URLField()
-    tech_stack = models.CharField(max_length=255, required=False)
+    tech_stack = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"Registration for {self.team_name}"
