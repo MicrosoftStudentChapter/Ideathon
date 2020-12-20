@@ -1,0 +1,60 @@
+{% extends "website/base.html" %}
+{% block content %}
+<div class="card">
+        <div class="card-header">
+            <h1><b>Collection ID {{ object }}</b></h1>
+        </div>
+        <div class="card-body">
+        <table class="table">
+        <!--for inline added titles-->
+        <h2>Members:</h2>
+        {% if object.members %}
+        {% for member in object.members.all %}
+        <tr>
+            <th>{{member.name}}</th>
+            <td>{{member.roll_number}}</td>
+            <td>{{member.year}}</td>
+            <td>{{member.discord_id}}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        <!--end-->
+        </table>
+        <h2>Details:</h2>
+        <table class="table">
+    	{% if object.team_name %}
+    	<tr>
+            <th>Team Name</th>
+            <td>{{ object.team_name }}</td>
+        </tr>
+    	{% endif %}
+    	{% if object.project_name %}
+    	<tr>
+            <th>Project Name</th>
+            <td>{{ object.project_name }}</td>
+        </tr>
+    	{% endif %}
+        {% if object.tech_stack %}
+    	<tr>
+            <th>Tech Stack</th>
+            <td>{{ object.tech_stack }}</td>
+        </tr>
+        {% endif %}
+        {% if object.leader_email %}
+    	<tr>
+            <th>Email</th>
+            <td>{{ object.leader_email }}</td>
+        </tr>
+        {% endif %}
+        {% if object.leader_mobile %}
+    	<tr>
+            <th>Mobile Number</th>
+            <td>{{ object.leader_mobile }}</td>
+        </tr>
+    	{% endif %}
+        </table>
+        <a class="btn btn-outline-info" href="{% url 'website:collection_update' pk=object.id %}">Update</a>
+        <a class="btn btn-outline-danger" href="{% url 'website:collection_detail' pk=object.id %}">Delete</a>
+        </div>
+</div>
+{% endblock content %}

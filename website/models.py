@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 
 
 MOBILE_REGEX = "^(\+\d{1,3}[- ]?)?\d{10}$"  # noqa
@@ -21,6 +22,12 @@ class Team(models.Model):
                 code="invalid_mobile",
             )
         ],
+    )
+    created_by = models.ForeignKey(
+        User,
+        related_name="collections",
+        blank=True, null=True,
+        on_delete=models.SET_NULL
     )
 
     def __str__(self):
