@@ -13,6 +13,28 @@ class TeamMemberForm(forms.ModelForm):
     class Meta:
         model = TeamMember
         exclude = ()
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    'class': 'form-control'
+                },
+            ),
+            'roll_number': forms.TextInput(
+                attrs={
+                    'class': 'form-control'
+                },
+            ),
+            'year': forms.Select(
+                attrs={
+                    'class': 'custom-select'
+                },
+            ),
+            'discord_id': forms.TextInput(
+                attrs={
+                    'class': 'form-control'
+                },
+            ),
+        }
 
 
 TeamMemberFormSet = inlineformset_factory(
@@ -26,7 +48,8 @@ TeamMemberFormSet = inlineformset_factory(
         'discord_id',
     ],
     extra=1,
-    can_delete=True
+    can_delete=True,
+    max_num=3,
 )
 
 
@@ -39,17 +62,23 @@ class TeamForm(forms.ModelForm):
         super(TeamForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = True
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-md-3 create-label'
-        self.helper.field_class = 'col-md-9'
+        self.helper.form_class = ''
+        self.helper.label_class = 'form-label'
+        self.helper.field_class = 'form-control'
         self.helper.layout = Layout(
             Div(
-                Field('team_name'),
-                Field('project_name'),
-                Field('ppt_url'),
-                Field('tech_stack'),
-                Field('leader_email'),
-                Field('leader_mobile'),
+                Field('team_name', css_class="form-control"),
+                HTML("<br>"),
+                Field('project_name', css_class="form-control"),
+                HTML("<br>"),
+                Field('project_name', css_class="form-control"),
+                HTML("<br>"),
+                Field('ppt_url', css_class="form-control"),
+                HTML("<br>"),
+                Field('tech_stack', css_class="form-control"),
+                HTML("<br>"),
+                Field('leader_mobile', css_class="form-control"),
+                HTML("<br>"),
                 Fieldset('Add Members',
                     Formset('members')),
                 Field('note'),
