@@ -53,8 +53,8 @@
         </tr>
     	{% endif %}
         </table>
-        <a class="btn btn-outline-info" href="{% url 'website:collection_update' pk=object.id %}">Update</a>
-        <a class="btn btn-outline-danger" href="{% url 'website:collection_detail' pk=object.id %}">Delete</a>
+        <a class="btn btn-outline-info" href="{% url 'website:team_update' pk=object.id %}">Update</a>
+        <a class="btn btn-outline-danger" href="{% url 'website:team_detail' pk=object.id %}">Delete</a>
         </div>
 </div>
 {% endblock content %}

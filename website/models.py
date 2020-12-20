@@ -12,7 +12,6 @@ class Team(models.Model):
     project_name = models.CharField(max_length=255)
     ppt_url = models.URLField()
     tech_stack = models.CharField(max_length=255, blank=True, null=True)
-    leader_email = models.EmailField()
     leader_mobile = models.CharField(
         max_length=16,
         validators=[

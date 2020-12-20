@@ -1,6 +1,7 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
+
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -11,35 +12,50 @@
 
     <title>MLSC Ideathon</title>
   </head>
+
   <body>
     <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">MyCollections</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">IDEATHON 2K20</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-      </li>
-  </div>
-</nav>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            {% if user.is_authenticated %}
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'website:logout' %}">Logout <span class="sr-only">(current)</span></a>
+              </li>
+            {% else %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'website:login' %}">Login <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'website:register' %}">Register <span class="sr-only">(current)</span></a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
     </header>
+    <br>
     <div class="container">
     {% block content %}
 
       <div class="card">
         <div class="card-header">
-        <h1>All collections</h1>
-        <a class="btn btn-outline-primary" href="{% url 'website:collection_create' %}" role="button">Create new collection</a>
+        <h1>All Teams</h1>
+        <a class="btn btn-outline-primary" href="{% url 'website:team_create' %}" role="button">Submit your idea</a>
         </div>
         <div class="card-body">
           {% if teams %}
           {% for object in teams %}
             <li>
-                <a href="{% url 'website:collection_detail' pk=object.pk %}">Collection ID {{ object }}</a>
+                <a href="{% url 'website:team_detail' pk=object.pk %}">Collection ID {{ object }}</a>
             </li>
           {% endfor %}
           {% else %}

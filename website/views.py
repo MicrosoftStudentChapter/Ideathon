@@ -1,10 +1,68 @@
 from .models import *
 from .forms import *
+
+from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
+from django.db import IntegrityError
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.db import transaction
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
+
+def login_view(request):
+    if request.method == "POST":
+
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("website:homepage"))
+        else:
+            return render(request, "website/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        return render(request, "website/login.html")
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("website:homepage"))
+
+
+def register(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+
+        # Ensure password matches confirmation
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+        if password != confirmation:
+            return render(request, "website/register.html", {
+                "message": "Passwords must match."
+            })
+
+        # Attempt to create new user
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+        except IntegrityError:
+            return render(request, "website/register.html", {
+                "message": "Username already taken."
+            })
+        login(request, user)
+        return HttpResponseRedirect(reverse("website:homepage"))
+    else:
+        return render(request, "website/register.html")
 
 
 class HomepageView(TemplateView):
@@ -25,6 +83,7 @@ class TeamDetailView(DetailView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class TeamCreate(CreateView):
     model = Team
     template_name = 'website/team_create.html'
@@ -51,7 +110,7 @@ class TeamCreate(CreateView):
         return super(TeamCreate, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('website:collection_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('website:team_detail', kwargs={'pk': self.object.pk})
 
 
 class TeamUpdate(UpdateView):
@@ -80,4 +139,4 @@ class TeamUpdate(UpdateView):
         return super(TeamUpdate, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('website:collection_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('website:team_detail', kwargs={'pk': self.object.pk})
