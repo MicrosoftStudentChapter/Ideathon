@@ -9,6 +9,10 @@ verify_ssl = true
 django = "*"
 django-crispy-forms = "*"
 django-dynamic-formsets = "*"
+gunicorn = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"
