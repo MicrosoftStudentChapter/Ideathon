@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.db import transaction
 from django.utils.decorators import method_decorator
@@ -71,6 +71,15 @@ class HomepageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['teams'] = Team.objects.order_by('id')
+        if self.request.user.is_authenticated:
+            team = Team.objects.filter(created_by=self.request.user).exists()
+            if team:
+                print("here")
+                context['exist'] = False
+            else:
+                context['exist'] = True
+        else:
+            context['exist'] = True
         return context
 
 
@@ -113,6 +122,7 @@ class TeamCreate(CreateView):
         return reverse_lazy('website:team_detail', kwargs={'pk': self.object.pk})
 
 
+@method_decorator(login_required, name='dispatch')
 class TeamUpdate(UpdateView):
     model = Team
     template_name = 'website/team_create.html'
@@ -140,3 +150,10 @@ class TeamUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('website:team_detail', kwargs={'pk': self.object.pk})
+
+
+@method_decorator(login_required, name='dispatch')
+class TeamDelete(DeleteView):
+    model = Team
+    template_name = 'website/confirm_delete.html'
+    success_url = reverse_lazy('website:homepage')

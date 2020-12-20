@@ -2,7 +2,7 @@
 {% block content %}
 <div class="card">
         <div class="card-header">
-            <h1><b>Collection ID {{ object }}</b></h1>
+            <h1><b>Team {{ object }}</b></h1>
         </div>
         <div class="card-body">
         <table class="table">
@@ -46,15 +46,13 @@
             <td>{{ object.leader_email }}</td>
         </tr>
         {% endif %}
-        {% if object.leader_mobile %}
-    	<tr>
-            <th>Mobile Number</th>
-            <td>{{ object.leader_mobile }}</td>
-        </tr>
-    	{% endif %}
         </table>
-        <a class="btn btn-outline-info" href="{% url 'website:team_update' pk=object.id %}">Update</a>
-        <a class="btn btn-outline-danger" href="{% url 'website:team_detail' pk=object.id %}">Delete</a>
+        {% if user.is_authenticated %}
+            {% if user == object.created_by %}
+                <a class="btn btn-outline-info" href="{% url 'website:team_update' pk=object.id %}">Update</a>
+                <a class="btn btn-outline-danger" href="{% url 'website:team_delete' pk=object.id %}">Delete</a>
+            {% endif %}
+        {% endif %}
         </div>
 </div>
 {% endblock content %}

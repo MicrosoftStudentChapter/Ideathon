@@ -81,7 +81,6 @@ class TeamForm(forms.ModelForm):
                 HTML("<br>"),
                 Fieldset('Add Members',
                     Formset('members')),
-                Field('note'),
                 HTML("<br>"),
                 ButtonHolder(Submit('submit', 'save')),
                 )
